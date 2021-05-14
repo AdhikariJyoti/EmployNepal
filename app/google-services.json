@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "471433928731",
+    "project_id": "employ-nepal-43991",
+    "storage_bucket": "employ-nepal-43991.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471433928731:android:8426e2d201734b69a298be",
+        "android_client_info": {
+          "package_name": "android.example.employnepal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471433928731-j4mpukqss3q07pmovkh9tn005srv3ebb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC97ONDHDncOgTxSpAzrT8-PZze0bZIu6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471433928731-j4mpukqss3q07pmovkh9tn005srv3ebb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
