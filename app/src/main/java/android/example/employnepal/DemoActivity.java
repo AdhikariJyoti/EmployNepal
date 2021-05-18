@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,9 @@ public class DemoActivity extends AppCompatActivity {
     private RadioButton radioMale;
     private RadioButton radioFemale;
     private RadioButton radioOthers;
+    private RadioButton radioButton;
+    private RadioGroup radioGroup;
+    private String gender = "";
     private FirebaseAuth auth;
 
     @Override
@@ -60,14 +64,15 @@ public class DemoActivity extends AppCompatActivity {
         btnback = findViewById(R.id.back_button);
         progressBar = findViewById(R.id.progressbar);
 
+        radioGroup = findViewById(R.id.radioGroupSignup);
         radioMale = findViewById(R.id.male_signup);
         radioFemale = findViewById(R.id.female_signup);
         radioOthers = findViewById(R.id.others_signup);
+        radioButton = findViewById(radioGroup.getCheckedRadioButtonId());
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         database = FirebaseDatabase.getInstance();
-        reference = database.getReference().child("users");
-
+        reference = database.getReference();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -82,6 +87,8 @@ public class DemoActivity extends AppCompatActivity {
 
             }
         });
+
+
         btnsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,9 +97,9 @@ public class DemoActivity extends AppCompatActivity {
                 String emailSignUp = emailsignup.getText().toString().trim();
                 String contactSignUp = contactsignup.getText().toString().trim();
                 String locationSignUp = locationsignup.getText().toString().trim();
-                String male = radioMale.getText().toString();
-                String female = radioFemale.getText().toString();
-                String others = radioOthers.getText().toString();
+//                String male = radioMale.getText().toString();
+//                String female = radioFemale.getText().toString();
+//                String others = radioOthers.getText().toString();
                 String passwordSignUp = passwordsignup.getText().toString().trim();
                 String confirmPasswordSignUp = confirmpasswordsignup.getText().toString().trim();
 
@@ -121,7 +128,7 @@ public class DemoActivity extends AppCompatActivity {
                     contactsignup.requestFocus();
                     return;
                 }
-                if (contactSignUp.length() < 10) {
+                if (!(contactSignUp.length() == 10)) {
                     contactsignup.setError("Please Enter 10 digits");
                     v.vibrate(100);
                     contactsignup.requestFocus();
@@ -133,6 +140,7 @@ public class DemoActivity extends AppCompatActivity {
                     locationsignup.requestFocus();
                     return;
                 }
+
 
                 if (TextUtils.isEmpty(passwordSignUp)) {
                     passwordsignup.setError("Please Enter password");
@@ -154,32 +162,45 @@ public class DemoActivity extends AppCompatActivity {
                     return;
                 }
 
-                //setting value to database
-                userHelper.setFirstName(firstName);
-                reference.child(String.valueOf(i + 1)).setValue(userHelper);
-                userHelper.setLastName(lastName);
-                reference.child(String.valueOf(i + 1)).setValue(userHelper);
-                userHelper.setEmail(emailSignUp);
-                reference.child(String.valueOf(i + 1)).setValue(userHelper);
-                userHelper.setContact(contactSignUp);
-                reference.child(String.valueOf(i + 1)).setValue(userHelper);
-                userHelper.setLocation(locationSignUp);
-                reference.child(String.valueOf(i + 1)).setValue(userHelper);
 
-                if (radioMale.isChecked()) {
-                    userHelper.setGender(male);
-                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
-                } else if (radioFemale.isChecked()) {
-                    userHelper.setGender(female);
-                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
+                //setting value to database
+
+                userHelper.setFirstName(firstName);
+                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
+                userHelper.setLastName(lastName);
+                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
+                userHelper.setEmail(emailSignUp);
+                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
+                userHelper.setContact(contactSignUp);
+                reference.child("users").child(String.valueOf(i)+ 1).setValue(userHelper);
+                userHelper.setLocation(locationSignUp);
+                reference.child("users").child(String.valueOf(i)+1).setValue(userHelper);
+
+//                if (radioMale.isChecked()) {
+//                    userHelper.setGender(male);
+//                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
+//                } else if (radioFemale.isChecked()) {
+//                    userHelper.setGender(female);
+//                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
+//                } else {
+//                    userHelper.setGender(others);
+//                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
+//                }
+                if (radioFemale.isChecked()) {
+                    gender = "Female";
+                } else if (radioMale.isChecked()) {
+                    gender = "Male";
+
                 } else {
-                    userHelper.setGender(others);
-                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
+                    gender = "Others";
                 }
+
+                userHelper.setGender(gender);
+                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
                 userHelper.setPassword(passwordSignUp);
-                reference.child(String.valueOf(i + 1)).setValue(userHelper);
+                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
                 userHelper.setConfirmPassword(confirmPasswordSignUp);
-                reference.child(String.valueOf(i + 1)).setValue(userHelper);
+                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
 
                 progressBar.setVisibility(View.VISIBLE);
                 //authentication with email and password
@@ -190,7 +211,7 @@ public class DemoActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
 
                         if (!task.isSuccessful()) {
-                            Toast.makeText(DemoActivity.this, "Authentication failed" + task.getException(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DemoActivity.this, "Authentication failed :"+task.getException() , Toast.LENGTH_LONG).show();
                         } else {
                             startActivity(new Intent(DemoActivity.this, LoginActivity.class));
 

@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
     Vibrator v;
@@ -25,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button rememberMeLogin, btnLoginJobProvider, btnLoginJobSeeker, btnCreateAccount, btnForgotPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         auth = FirebaseAuth.getInstance();
+        database=FirebaseDatabase.getInstance();
 
         emailLogin = findViewById(R.id.email_login);
         passwordLogin = findViewById(R.id.password_login);
@@ -42,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         btnForgotPassword = findViewById(R.id.btn_forgot_password);
         progressBar = findViewById(R.id.progressbar);
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+
 
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
             }
         });
+
 
         btnLoginJobProvider.setOnClickListener(new View.OnClickListener() {
             @Override

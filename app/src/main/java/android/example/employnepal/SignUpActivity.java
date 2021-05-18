@@ -20,14 +20,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignUpActivity extends AppCompatActivity {
     UserHelper userHelper;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
-    String gender;
+    String gender ="";
     int i = 0;
     Vibrator v;
     private EditText inputFirstName, inputLastName, emailsignup, contactsignup, locationsignup, passwordsignup, confirmpasswordsignup;
@@ -35,10 +38,11 @@ public class SignUpActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RadioGroup genderRg;
     private RadioButton radioButtonOptions;
-    //    private RadioButton radioMale;
-//    private RadioButton radioFemale;
-//    private RadioButton radioOthers;
+    private RadioButton radioMale;
+    private RadioButton radioFemale;
+    private RadioButton radioOthers;
     private FirebaseAuth auth;
+    private long userId=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +63,9 @@ public class SignUpActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar);
 
         //radioButton = findViewById(radioGroup.getCheckedRadioButtonId());
-//        radioMale = findViewById(R.id.signup_male);
-//        radioFemale = findViewById(R.id.female_signup);
-//        radioOthers = findViewById(R.id.signup_others);
+        radioMale = findViewById(R.id.male_signup);
+        radioFemale = findViewById(R.id.female_signup);
+        radioOthers = findViewById(R.id.others_signup);
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 //        genderRg = findViewById(R.id.radioGroupSignup);
@@ -92,22 +96,22 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //getting the reference to firebase database
                 rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference("users");
+                reference = rootNode.getReference();
 
-//                reference.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if (snapshot.exists()) {
-//                            i = (int) snapshot.getChildrenCount();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//                        ///
-//
-//                    }
-//                });
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            i = (int) snapshot.getChildrenCount();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        ///
+
+                    }
+                });
 
                 final String firstName = inputFirstName.getText().toString().trim();
                 final String lastName = inputLastName.getText().toString().trim();
@@ -149,7 +153,7 @@ public class SignUpActivity extends AppCompatActivity {
                     contactsignup.requestFocus();
                     return;
                 }
-                if (contactSignUp.length() < 10) {
+                if (!(contactSignUp.length() == 10)) {
                     contactsignup.setError("Please Enter 10 digits");
                     v.vibrate(100);
                     contactsignup.requestFocus();
@@ -161,14 +165,15 @@ public class SignUpActivity extends AppCompatActivity {
                     locationsignup.requestFocus();
                     return;
                 }
-//                if (radioMale.isChecked()) {
-//                    userHelper.setGender(male);
-//                } else if (radioFemale.isChecked()) {
-//                    userHelper.setGender(female);
-//                } else {
-//                    userHelper.setGender(others);
-//
-//                }
+                if (radioFemale.isChecked()) {
+                    gender = "Female";
+                } else if (radioMale.isChecked()) {
+                    gender = "Male";
+
+                } else {
+                    gender = "Others";
+                }
+
                 //radio button ko kam baki xa
                 if (TextUtils.isEmpty(passwordSignUp)) {
                     passwordsignup.setError("Please Enter password");
@@ -190,30 +195,45 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-                genderRg = findViewById(R.id.radioGroupSignup);
-
-                genderRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                        radioButtonOptions = genderRg.findViewById(i);
-                        switch (i) {
-                            case R.id.male_signup:
-                            case R.id.female_signup:
-                            case R.id.others_signup:
-                                gender = radioButtonOptions.getText().toString();
-                                break;
-                            default:
-
-
-                        }
-                    }
-                });
+//                genderRg = findViewById(R.id.radioGroupSignup);
+//
+//                genderRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                        radioButtonOptions = genderRg.findViewById(i);
+//                        switch (i) {
+//
+//                            case R.id.female_signup:
+//                                gender ="Female";
+//                                break;
+//                            case R.id.male_signup:
+//                                gender ="Male";
+//                                break;
+//                            case R.id.others_signup:
+//                                gender ="Others";
+//                                break;
+//
+//                            default:
+//
+//
+//                        }
+//                    }
+//                });
 
                 //storing data to database
                 //radio button ko lagi garna baki xa
                 UserHelper userHelper = new UserHelper(firstName, lastName, emailSignUp, contactSignUp, gender, locationSignUp, passwordSignUp, confirmPasswordSignUp);
-                reference.setValue(userHelper);
-                reference.child(contactSignUp).setValue(userHelper);
+                //reference.setValue(userHelper);
+                //reference.child(contactSignUp).setValue(userHelper);
+                reference.child("users").child(String.valueOf(i)).child("firstName").setValue(firstName);
+                reference.child("users").child(String.valueOf(i)).child("lastName").setValue(lastName);
+                reference.child("users").child(String.valueOf(i)).child("email").setValue(emailSignUp);
+                reference.child("users").child(String.valueOf(i)).child("contact").setValue(contactSignUp);
+                reference.child("users").child(String.valueOf(i)).child("gender").setValue(gender);
+                reference.child("users").child(String.valueOf(i)).child("location").setValue(locationSignUp);
+                reference.child("users").child(String.valueOf(i)).child("password").setValue(passwordSignUp);
+                reference.child("users").child(String.valueOf(i)).child("confirmPassword").setValue(confirmPasswordSignUp);
+
 
 
                 //authentication with email and password
