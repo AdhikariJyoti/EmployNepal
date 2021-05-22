@@ -73,6 +73,7 @@ public class DemoActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -97,9 +98,6 @@ public class DemoActivity extends AppCompatActivity {
                 String emailSignUp = emailsignup.getText().toString().trim();
                 String contactSignUp = contactsignup.getText().toString().trim();
                 String locationSignUp = locationsignup.getText().toString().trim();
-//                String male = radioMale.getText().toString();
-//                String female = radioFemale.getText().toString();
-//                String others = radioOthers.getText().toString();
                 String passwordSignUp = passwordsignup.getText().toString().trim();
                 String confirmPasswordSignUp = confirmpasswordsignup.getText().toString().trim();
 
@@ -140,7 +138,14 @@ public class DemoActivity extends AppCompatActivity {
                     locationsignup.requestFocus();
                     return;
                 }
+                if (radioFemale.isChecked()) {
+                    gender = "Female";
+                } else if (radioMale.isChecked()) {
+                    gender = "Male";
 
+                } else {
+                    gender = "Others";
+                }
 
                 if (TextUtils.isEmpty(passwordSignUp)) {
                     passwordsignup.setError("Please Enter password");
@@ -161,46 +166,28 @@ public class DemoActivity extends AppCompatActivity {
                     confirmpasswordsignup.requestFocus();
                     return;
                 }
+                //email validation
 
 
                 //setting value to database
-
-                userHelper.setFirstName(firstName);
-                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
-                userHelper.setLastName(lastName);
-                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
-                userHelper.setEmail(emailSignUp);
-                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
-                userHelper.setContact(contactSignUp);
-                reference.child("users").child(String.valueOf(i)+ 1).setValue(userHelper);
-                userHelper.setLocation(locationSignUp);
-                reference.child("users").child(String.valueOf(i)+1).setValue(userHelper);
-
-//                if (radioMale.isChecked()) {
-//                    userHelper.setGender(male);
-//                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
-//                } else if (radioFemale.isChecked()) {
-//                    userHelper.setGender(female);
-//                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
-//                } else {
-//                    userHelper.setGender(others);
-//                    reference.child(String.valueOf(i + 1)).setValue(userHelper);
-//                }
-                if (radioFemale.isChecked()) {
-                    gender = "Female";
-                } else if (radioMale.isChecked()) {
-                    gender = "Male";
-
-                } else {
-                    gender = "Others";
-                }
-
-                userHelper.setGender(gender);
-                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
-                userHelper.setPassword(passwordSignUp);
-                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
-                userHelper.setConfirmPassword(confirmPasswordSignUp);
-                reference.child("users").child(String.valueOf(i) + 1).setValue(userHelper);
+                UserHelper userHelper = new UserHelper(firstName, lastName, emailSignUp, contactSignUp, locationSignUp, gender, passwordSignUp, confirmPasswordSignUp);
+                reference.child("users").push().setValue(userHelper);
+//                //userHelper.setFirstName(firstName);
+//                reference.child("users").child(String.valueOf(i+1)).setValue(userHelper);
+//                //userHelper.setLastName(lastName);
+//                reference.child("users").child(String.valueOf(i+1)).setValue(userHelper);
+//                //userHelper.setEmail(emailSignUp);
+//                reference.child("users").child(String.valueOf(i+1)).setValue(userHelper);
+//                //userHelper.setContact(contactSignUp);
+//                reference.child("users").child(String.valueOf(i+1)).setValue(userHelper);
+//                //userHelper.setLocation(locationSignUp);
+//                reference.child("users").child(String.valueOf(i+1)).setValue(userHelper);
+//                //userHelper.setGender(gender);
+//                reference.child("users").child(String.valueOf(i+1)).setValue(userHelper);
+//                //userHelper.setPassword(passwordSignUp);
+//                reference.child("users").child(String.valueOf(i+1)).setValue(userHelper);
+//                //userHelper.setConfirmPassword(confirmPasswordSignUp);
+//                reference.child("users").child(String.valueOf(i+1)).setValue(userHelper);
 
                 progressBar.setVisibility(View.VISIBLE);
                 //authentication with email and password
@@ -211,7 +198,7 @@ public class DemoActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
 
                         if (!task.isSuccessful()) {
-                            Toast.makeText(DemoActivity.this, "Authentication failed :"+task.getException() , Toast.LENGTH_LONG).show();
+                            Toast.makeText(DemoActivity.this, "Authentication failed :" + task.getException(), Toast.LENGTH_LONG).show();
                         } else {
                             startActivity(new Intent(DemoActivity.this, LoginActivity.class));
 
@@ -227,10 +214,19 @@ public class DemoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(new Intent(DemoActivity.this, LoginActivity.class)));
+                Intent intent = new Intent(DemoActivity.this, LoginActivity.class);
+                startActivity(intent);
                 finish();
             }
 
+        });
+        btnback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DemoActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+            }
         });
 
 

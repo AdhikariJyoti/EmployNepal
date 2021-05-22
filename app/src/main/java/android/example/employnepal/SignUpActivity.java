@@ -30,7 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     UserHelper userHelper;
     FirebaseDatabase rootNode;
     DatabaseReference reference;
-    String gender ="";
+    String gender = "";
     int i = 0;
     Vibrator v;
     private EditText inputFirstName, inputLastName, emailsignup, contactsignup, locationsignup, passwordsignup, confirmpasswordsignup;
@@ -42,7 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioButton radioFemale;
     private RadioButton radioOthers;
     private FirebaseAuth auth;
-    private long userId=0;
+    private long userId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,35 +61,10 @@ public class SignUpActivity extends AppCompatActivity {
         btnsignup = findViewById(R.id.btnSignUp);
         btnback = findViewById(R.id.back_button);
         progressBar = findViewById(R.id.progressbar);
-
-        //radioButton = findViewById(radioGroup.getCheckedRadioButtonId());
         radioMale = findViewById(R.id.male_signup);
         radioFemale = findViewById(R.id.female_signup);
         radioOthers = findViewById(R.id.others_signup);
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-//        genderRg = findViewById(R.id.radioGroupSignup);
-
-//        genderRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-//                radioButtonOptions = genderRg.findViewById(i);
-//                switch (i) {
-//                    case R.id.male_signup:
-//                    case R.id.female_signup:
-//                    case R.id.others_signup:
-//                        gender = radioButtonOptions.getText().toString();
-//                        break;
-//                    default:
-//
-//
-//                }
-//
-////                gender = radioButtonOptions.getText().toString();
-//
-//
-//            }
-//        });
 
         btnsignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,17 +92,9 @@ public class SignUpActivity extends AppCompatActivity {
                 final String lastName = inputLastName.getText().toString().trim();
                 final String emailSignUp = emailsignup.getText().toString().trim();
                 final String contactSignUp = contactsignup.getText().toString().trim();
-//                String gender = radioButton.getText().toString();
-//                String male = radioMale.getText().toString();
-//                String female = radioFemale.getText().toString();
-//                String others = radioOthers.getText().toString();
-
-
                 final String locationSignUp = locationsignup.getText().toString().trim();
                 final String passwordSignUp = passwordsignup.getText().toString().trim();
                 final String confirmPasswordSignUp = confirmpasswordsignup.getText().toString().trim();
-
-                //radiobuttons ko kam garna baki xa
 
                 if (TextUtils.isEmpty(firstName)) {
                     inputFirstName.setError("Please Enter your first name");
@@ -174,7 +141,6 @@ public class SignUpActivity extends AppCompatActivity {
                     gender = "Others";
                 }
 
-                //radio button ko kam baki xa
                 if (TextUtils.isEmpty(passwordSignUp)) {
                     passwordsignup.setError("Please Enter password");
                     v.vibrate(100);
@@ -195,33 +161,8 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-//                genderRg = findViewById(R.id.radioGroupSignup);
-//
-//                genderRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-//                        radioButtonOptions = genderRg.findViewById(i);
-//                        switch (i) {
-//
-//                            case R.id.female_signup:
-//                                gender ="Female";
-//                                break;
-//                            case R.id.male_signup:
-//                                gender ="Male";
-//                                break;
-//                            case R.id.others_signup:
-//                                gender ="Others";
-//                                break;
-//
-//                            default:
-//
-//
-//                        }
-//                    }
-//                });
 
                 //storing data to database
-                //radio button ko lagi garna baki xa
                 UserHelper userHelper = new UserHelper(firstName, lastName, emailSignUp, contactSignUp, gender, locationSignUp, passwordSignUp, confirmPasswordSignUp);
                 //reference.setValue(userHelper);
                 //reference.child(contactSignUp).setValue(userHelper);
@@ -233,7 +174,6 @@ public class SignUpActivity extends AppCompatActivity {
                 reference.child("users").child(String.valueOf(i)).child("location").setValue(locationSignUp);
                 reference.child("users").child(String.valueOf(i)).child("password").setValue(passwordSignUp);
                 reference.child("users").child(String.valueOf(i)).child("confirmPassword").setValue(confirmPasswordSignUp);
-
 
 
                 //authentication with email and password
