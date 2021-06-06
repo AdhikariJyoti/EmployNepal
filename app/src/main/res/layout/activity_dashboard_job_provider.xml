@@ -3,6 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".DashboardJobProvider">
+    <TextView
+        android:id="@+id/txtDashboard"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:fontFamily="times new roman"
+        android:gravity="center"
+        android:text="@string/job_provider_s_dashboard"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

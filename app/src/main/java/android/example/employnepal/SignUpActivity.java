@@ -2,6 +2,7 @@ package android.example.employnepal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.example.employnepal.models.UserHelper;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
@@ -10,10 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,28 +29,27 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SignUpActivity extends AppCompatActivity {
     UserHelper userHelper;
-    FirebaseDatabase rootNode;
+    FirebaseDatabase database;
     DatabaseReference reference;
-    String gender = "";
-    int i = 0;
+    long i = 0;
     Vibrator v;
     private EditText inputFirstName, inputLastName, emailsignup, contactsignup, locationsignup, passwordsignup, confirmpasswordsignup;
     private Button btnsignup, btnback;
     private ProgressBar progressBar;
-    private RadioGroup genderRg;
-    private RadioButton radioButtonOptions;
     private RadioButton radioMale;
     private RadioButton radioFemale;
     private RadioButton radioOthers;
+    private String gender = "";
     private FirebaseAuth auth;
-    private long userId = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
         auth = FirebaseAuth.getInstance();
+
+        userHelper = new UserHelper();
 
         inputFirstName = findViewById(R.id.firstName_signup);
         inputLastName = findViewById(R.id.lastName_signup);
@@ -60,41 +60,54 @@ public class SignUpActivity extends AppCompatActivity {
         confirmpasswordsignup = findViewById(R.id.confirm_password_signup);
         btnsignup = findViewById(R.id.btnSignUp);
         btnback = findViewById(R.id.back_button);
-        progressBar = findViewById(R.id.progressbar);
+        progressBar = findViewById(R.id.progressbarSignup);
         radioMale = findViewById(R.id.male_signup);
         radioFemale = findViewById(R.id.female_signup);
         radioOthers = findViewById(R.id.others_signup);
+
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    i = (snapshot.getChildrenCount());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                ///
+
+            }
+        });
+
+
+
 
         btnsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //getting the reference to firebase database
-                rootNode = FirebaseDatabase.getInstance();
-                reference = rootNode.getReference();
+                String firstName = inputFirstName.getText().toString().trim();
+                String lastName = inputLastName.getText().toString().trim();
+                String emailSignUp = emailsignup.getText().toString().trim();
+                String contactSignUp = contactsignup.getText().toString().trim();
+                String locationSignUp = locationsignup.getText().toString().trim();
+                String passwordSignUp = passwordsignup.getText().toString().trim();
+                String confirmPasswordSignUp = confirmpasswordsignup.getText().toString().trim();
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+//                String passwordVal="^" +
+////                                    "(?=.*[0-9])"+
+//                                    "(?=.*[a-z])"+
+//                                    "(?=.*[A-Z])"+
+////                                    "(?=.*[a-zA-Z])"+
+//                                    "(?=.*[@#$%^&+=])"+
+//                                    "$";
 
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            i = (int) snapshot.getChildrenCount();
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        ///
-
-                    }
-                });
-
-                final String firstName = inputFirstName.getText().toString().trim();
-                final String lastName = inputLastName.getText().toString().trim();
-                final String emailSignUp = emailsignup.getText().toString().trim();
-                final String contactSignUp = contactsignup.getText().toString().trim();
-                final String locationSignUp = locationsignup.getText().toString().trim();
-                final String passwordSignUp = passwordsignup.getText().toString().trim();
-                final String confirmPasswordSignUp = confirmpasswordsignup.getText().toString().trim();
 
                 if (TextUtils.isEmpty(firstName)) {
                     inputFirstName.setError("Please Enter your first name");
@@ -113,6 +126,13 @@ public class SignUpActivity extends AppCompatActivity {
                     v.vibrate(100);
                     emailsignup.requestFocus();
                     return;
+                }
+                if (!emailSignUp.matches(emailPattern)) {
+                    emailsignup.setError("Invalid email address!");
+                    v.vibrate(100);
+                    emailsignup.requestFocus();
+                    return;
+
                 }
                 if (TextUtils.isEmpty(contactSignUp)) {
                     contactsignup.setError("Please Enter your phone number");
@@ -154,54 +174,73 @@ public class SignUpActivity extends AppCompatActivity {
                     passwordsignup.requestFocus();
                     return;
                 }
+//                if (!passwordSignUp.matches(passwordVal)){
+//                    passwordsignup.setError("Password too weak");
+//                    v.vibrate(100);
+//                    passwordsignup.requestFocus();
+//                    return;
+//
+//                }
                 if (!passwordSignUp.equals(confirmPasswordSignUp)) {
                     confirmpasswordsignup.setError("Passwords didn't match");
                     v.vibrate(100);
                     confirmpasswordsignup.requestFocus();
                     return;
                 }
+                //verify phone
+                Intent intent=new Intent(SignUpActivity.this,OtpActivity.class);
+                intent.putExtra("firstName",firstName);
+                intent.putExtra("lastName",lastName);
+                intent.putExtra("email",emailSignUp);
+                intent.putExtra("contact",contactSignUp);
+                intent.putExtra("address",locationSignUp);
+                intent.putExtra("gender",gender);
+                intent.putExtra("password",passwordSignUp);
+                intent.putExtra("confirmPassword",confirmPasswordSignUp);
+                intent.putExtra("whatTODo","storeData");
 
 
-                //storing data to database
-                UserHelper userHelper = new UserHelper(firstName, lastName, emailSignUp, contactSignUp, gender, locationSignUp, passwordSignUp, confirmPasswordSignUp);
-                //reference.setValue(userHelper);
-                //reference.child(contactSignUp).setValue(userHelper);
-                reference.child("users").child(String.valueOf(i)).child("firstName").setValue(firstName);
-                reference.child("users").child(String.valueOf(i)).child("lastName").setValue(lastName);
-                reference.child("users").child(String.valueOf(i)).child("email").setValue(emailSignUp);
-                reference.child("users").child(String.valueOf(i)).child("contact").setValue(contactSignUp);
-                reference.child("users").child(String.valueOf(i)).child("gender").setValue(gender);
-                reference.child("users").child(String.valueOf(i)).child("location").setValue(locationSignUp);
-                reference.child("users").child(String.valueOf(i)).child("password").setValue(passwordSignUp);
-                reference.child("users").child(String.valueOf(i)).child("confirmPassword").setValue(confirmPasswordSignUp);
+                startActivity(intent);
+
+                //setting value to database
+                /*UserHelper userHelper = new UserHelper(firstName, lastName, emailSignUp, contactSignUp, locationSignUp, gender, passwordSignUp, confirmPasswordSignUp);
+                //reference.child("users").child(String.valueOf(i)).push().setValue(userHelper);
+                reference.child("users").child(contactSignUp).setValue(userHelper);*/
 
 
-                //authentication with email and password
+
                 progressBar.setVisibility(View.VISIBLE);
-                auth.createUserWithEmailAndPassword(emailSignUp, passwordSignUp).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                //authentication with email and password
+                /*auth.createUserWithEmailAndPassword(emailSignUp, passwordSignUp).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(SignUpActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, "User Authentication successful", Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
 
                         if (!task.isSuccessful()) {
-                            Toast.makeText(SignUpActivity.this, "Authentication failed" + task.getException(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "Authentication failed :" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         } else {
-                            startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                            //Intent intent=new Intent(SignUpActivity.this,LoginActivity.class);
+                            Intent intent=new Intent(SignUpActivity.this,OtpActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+
 
                         }
-
                     }
-                });
+                });*/
 
 
             }
         });
+
         btnback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(new Intent(SignUpActivity.this, LoginActivity.class)));
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                startActivity(intent);
                 finish();
             }
 
@@ -215,4 +254,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onResume();
         progressBar.setVisibility(View.GONE);
     }
+
+
 }

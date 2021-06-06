@@ -4,21 +4,25 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Employ Nepal"
+        android:label="@string/employ_nepal"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".PasswordUpdateSuccessActivity"/>
         <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".UpdatePasswordActivity" />
+        <activity android:name=".OtpActivity" />
+        <activity android:name=".SignUpActivity" />
         <activity android:name=".DashboardJobProvider" />
         <activity android:name=".DashboardJobSeeker" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".DemoActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

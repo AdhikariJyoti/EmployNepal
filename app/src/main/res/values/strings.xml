@@ -24,4 +24,24 @@
     <string name="signup">Sign Up</string>
     <string name="auth_failed">Authentication Error Occured</string>
     <string name="minimum_password">Password too short! Minimum 6 characters needed</string>
+    <string name="job_provider_s_dashboard">Job Provider\'s Dashboard</string>
+    <string name="verification">Verification</string>
+    <string name="verify_code">Verification Code</string>
+    <string name="otp_txt">Enter the OTP code sent to your phone number</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="sumbit_otp">Submit</string>
+    <string name="forget_password">FORGET PASSWORD</string>
+    <string name="forget_password_detail">Provide your account\'s phone for which you want to reset password</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="next_btn">NEXT</string>
+    <string name="employ_nepal">Employ Nepal</string>
+    <string name="forgot_password_icon">Forgot password icon</string>
+    <string name="new_credentials">New Credentials</string>
+    <string name="new_credentials_detail">Please set up your new password</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="update">Update</string>
+    <string name="updateData">updateData</string>
+    <string name="password_updated">PASSWORD UPDATED</string>
+    <string name="password_updated_success">Your password has been updated</string>
 </resources>

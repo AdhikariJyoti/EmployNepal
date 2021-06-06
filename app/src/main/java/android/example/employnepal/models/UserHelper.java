@@ -1,7 +1,9 @@
-package android.example.employnepal;
+package android.example.employnepal.models;
 
 public class UserHelper {
     String firstName, lastName, email, contact, location, gender, password, confirmPassword;
+
+
     //radio buttons ko lagi garna xa
 
 
