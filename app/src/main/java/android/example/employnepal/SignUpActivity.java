@@ -181,6 +181,12 @@ public class SignUpActivity extends AppCompatActivity {
 //                    return;
 //
 //                }
+                if (TextUtils.isEmpty(confirmPasswordSignUp)) {
+                    confirmpasswordsignup.setError("You have to enter password twice for confirmation");
+                    v.vibrate(100);
+                    confirmpasswordsignup.requestFocus();
+                    return;
+                }
                 if (!passwordSignUp.equals(confirmPasswordSignUp)) {
                     confirmpasswordsignup.setError("Passwords didn't match");
                     v.vibrate(100);

@@ -48,7 +48,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         phoneNumberTextField = findViewById(R.id.forget_password_phone_number);
         countryCodePicker = findViewById(R.id.country_code_picker);
         btnNextForgotPsw = findViewById(R.id.forget_password_next_btn);
-        progressBar = findViewById(R.id.progressbarNewPsw);
+        progressBar = findViewById(R.id.progressbarResetPsw);
 
         animation = AnimationUtils.loadAnimation(this, R.anim.slide_animation);
 

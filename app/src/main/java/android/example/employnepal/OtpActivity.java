@@ -19,6 +19,7 @@ import com.chaos.view.PinView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -94,17 +95,17 @@ public class OtpActivity extends AppCompatActivity {
         whatToDO = getIntent().getStringExtra("whatTODo");
 
 
-        //sendVerificationCodeToUser(completePhoneNo);
-        String country_code = "977";
-       String completePhoneNo = "+" + country_code + "" + contact;
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(auth)
-                        .setPhoneNumber(completePhoneNo)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(OtpActivity.this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
+        sendVerificationCodeToUser(contact);
+//        String country_code = "977";
+//       String completePhoneNo = "+" + country_code + "" + contact;
+//        PhoneAuthOptions options =
+//                PhoneAuthOptions.newBuilder(auth)
+//                        .setPhoneNumber(completePhoneNo)       // Phone number to verify
+//                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+//                        .setActivity(OtpActivity.this)                 // Activity (for callback binding)
+//                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+//                        .build();
+//        PhoneAuthProvider.verifyPhoneNumber(options);
 
 
         //if the user has not given his phone no/or the same mobile device is not used
@@ -133,19 +134,17 @@ public class OtpActivity extends AppCompatActivity {
 
     }
 
-//    private void sendVerificationCodeToUser(String completePhoneNo) {
-////        String country_code = "977";
-////        String completePhoneNo = "+" + country_code + "" + phoneNo;
-//        PhoneAuthOptions options =
-//                PhoneAuthOptions.newBuilder(auth)
-//                        .setPhoneNumber(completePhoneNo)       // Phone number to verify
-//                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-//                        .setActivity(OtpActivity.this)                 // Activity (for callback binding)
-//                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-//                        .build();
-//        PhoneAuthProvider.verifyPhoneNumber(options);
-//
-//    }
+    private void sendVerificationCodeToUser(String contact) {
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(auth)
+                        .setPhoneNumber("+" + country_code + "" + contact)       // Phone number to verify
+                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setActivity(OtpActivity.this)                 // Activity (for callback binding)
+                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);
+
+   }
 
 //    private void sendVerificationCodeToUser(String phoneNo) {
 //        String country_code = "977";
@@ -191,7 +190,13 @@ public class OtpActivity extends AppCompatActivity {
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(OtpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                Toast.makeText(OtpActivity.this, "Invalid Request was made", Toast.LENGTH_LONG).show();
+
+            } else if (e instanceof FirebaseTooManyRequestsException) {
+                Toast.makeText(OtpActivity.this, "The SMS quota for the project exceeded", Toast.LENGTH_LONG).show();
+            }
+            Toast.makeText(OtpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 
         }
     };
