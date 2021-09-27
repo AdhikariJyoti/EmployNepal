@@ -1,0 +1,40 @@
+package android.example.employnepal.ui.job;
+
+import android.example.employnepal.databinding.FragmentJobBinding;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+public class JobFragment extends Fragment {
+
+    private JobViewModel jobViewModel;
+    private FragmentJobBinding binding;
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        jobViewModel =
+                new ViewModelProvider(this).get(JobViewModel.class);
+
+        binding = FragmentJobBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+
+
+        return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+}

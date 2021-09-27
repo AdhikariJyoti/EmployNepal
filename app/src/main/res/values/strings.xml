@@ -32,7 +32,7 @@
     <string name="sumbit_otp">Submit</string>
     <string name="forget_password">FORGET PASSWORD</string>
     <string name="forget_password_detail">Provide your account\'s phone for which you want to reset password</string>
-    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="enter_email_address">Enter email address</string>
     <string name="next_btn">NEXT</string>
     <string name="employ_nepal">Employ Nepal</string>
     <string name="forgot_password_icon">Forgot password icon</string>
@@ -45,4 +45,45 @@
     <string name="password_updated">PASSWORD UPDATED</string>
     <string name="password_updated_success">Your password has been updated</string>
     <string name="title_activity_maps">Map</string>
+    <string name="welcome_to_employ_nepal">Welcome to Employ Nepal</string>
+    <string name="nav_header_desc">Navigation Header</string>
+    <string name="nav_header_title">Dear User</string>
+    <string name="nav_header_subtitle">user@gmail.com</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_aboutus">About us</string>
+    <string name="menu_logout">Logout</string>
+    <string name="title_job">Jobs</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="start">Start</string>
+    <string name="close">Close</string>
+
+    <string name="select_date">Select date</string>
+    <string name="job_title">Job Title</string>
+    <string name="job_description">Job Description</string>
+    <string name="number_of_employees">Number Of Employees</string>
+    <string name="job_location">Job Location</string>
+    <string name="job_category">Job Category</string>
+    <string name="approximate_working_hours">Approximate Working Hours</string>
+    <string name="salary">Salary</string>
+    <string name="apply_before">Apply Before</string>
+    <string name="post">Post</string>
+    <string name="range">Range</string>
+    <string name="fixed">Fixed</string>
+    <string name="negotiable">Negotiable</string>
+    <string name="contact_info">Contact Information</string>
+    <string name="post_a_job">Post Job</string>
+    <string name="job_post_date">Job Post Date</string>
+    <string name="Job_seeker_dashboard">Job Seeker Dashboard</string>
+    <string name="search_here">Search Jobs Here</string>
+    <string name="company">Company :</string>
+    <string name="job_provider_s_name">Job Provider\'s name</string>
+    <string name="search_jobs_here">Search Jobs Here</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="apply_a_job">Apply Job</string>
+    <string name="apply">Apply</string>
+
 </resources>

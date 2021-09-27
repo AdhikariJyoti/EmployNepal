@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DashboardJobSeeker">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.employnepal.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_seeker"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/topnavbuttonColor"
+            app:popupTheme="@style/Theme.employnepal.NoActionBar" >
+
+            <TextView
+                android:id="@+id/job_seeker_dashboard_txt"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="0dp"
+                android:background="@color/topnavbuttonColor"
+                android:fontFamily="times new roman"
+                android:gravity="center"
+                android:text="@string/Job_seeker_dashboard"
+                android:textColor="#ffffff"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TextContrastCheck" />
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+<!--            <EditText-->
+<!--                android:id="@+id/search_jobs_seeker"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_marginEnd="20dp"-->
+<!--                android:background="@drawable/search_layout"-->
+<!--                android:ems="10"-->
+<!--                android:hint="@string/search_here"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:paddingLeft="20dp"-->
+<!--                android:paddingTop="10dp"-->
+<!--                android:paddingRight="20dp"-->
+<!--                android:paddingBottom="10dp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textColorHint="@color/icontextColor"-->
+<!--                android:textSize="20sp" />-->
+
+
+<!--            <ImageView-->
+<!--                android:id="@+id/btn_search_job_seeker"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="-100dp"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:src="@mipmap/search_button" />-->
+
+            <androidx.appcompat.widget.SearchView
+                android:layout_margin="10dp"
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:queryHint="Search Jobs Here"
+                app:queryBackground="@color/topnavbuttonColor"
+                app:searchHintIcon="@mipmap/search_button"
+                android:background="@drawable/search_layout"
+                />
+
+
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/content_dashboard_job_seeker" />
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

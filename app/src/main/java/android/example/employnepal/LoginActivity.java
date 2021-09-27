@@ -11,8 +11,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,11 +22,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity {
+
+public class LoginActivity extends AppCompatActivity{
     Vibrator v;
     private EditText emailLogin, passwordLogin;
-    private Button  btnLoginJobProvider, btnLoginJobSeeker, btnCreateAccount, btnForgotPassword;
+    private Button btnLoginJobProvider, btnLoginJobSeeker, btnCreateAccount, btnForgotPassword;
     private ProgressBar progressBar;
     private CheckBox rememberMeLogin;
     private FirebaseAuth auth;
@@ -35,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
 
         emailLogin = findViewById(R.id.email_login);
@@ -51,17 +55,12 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
-//        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                FirebaseUser mFirebaseUser = firebaseAuth.getCurrentUser();
-//                if (mFirebaseUser != null) {
-//                    moveToDashboardActivity(mFirebaseUser);
-//                } else {
-//                    Toast.makeText(LoginActivity.this, "Please Login", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        };
+        FirebaseUser mFirebaseUser = auth.getCurrentUser();
+
+
+
+
+
 
 
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
@@ -87,20 +86,18 @@ public class LoginActivity extends AppCompatActivity {
                 String email = emailLogin.getText().toString().trim();
                 final String password = passwordLogin.getText().toString().trim();
 
-                 if (TextUtils.isEmpty(email)) {
+                if (TextUtils.isEmpty(email)) {
                     emailLogin.setError("Please Enter Email");
                     v.vibrate(100);
                     emailLogin.requestFocus();
                     return;
 
-                }
-                else if (TextUtils.isEmpty(password)) {
+                } else if (TextUtils.isEmpty(password)) {
                     passwordLogin.setError("Please Enter password");
                     v.vibrate(100);
                     passwordLogin.requestFocus();
                     return;
-                }
-                 else if (email.isEmpty() && password.isEmpty()) {
+                } else if (email.isEmpty() && password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Fields are empty", Toast.LENGTH_LONG).show();
                 } else if (password.length() < 6) {
                     passwordLogin.setError(getString(R.string.minimum_password));
@@ -115,6 +112,17 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
 
                                     } else {
+                                        Toast.makeText(LoginActivity.this, "Logging in....", Toast.LENGTH_SHORT).show();
+                                        Map<Object,String> userdata = new HashMap<>();
+                                        userdata.put("Email",email);
+                                        userdata.put("password",password);
+
+                                        database.getReference("JobProvider")
+                                                .child("LoginInfo").child(auth.getCurrentUser().getUid()).setValue(userdata);
+
+
+                                        emailLogin.setText("");
+                                        passwordLogin.setText("");
                                         Intent intent = new Intent(LoginActivity.this, DashboardJobProvider.class);
                                         startActivity(intent);
                                         finish();
@@ -135,19 +143,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = emailLogin.getText().toString().trim();
                 final String password = passwordLogin.getText().toString().trim();
-                 if (TextUtils.isEmpty(email)) {
+                if (TextUtils.isEmpty(email)) {
                     emailLogin.setError("Please Enter password");
                     v.vibrate(100);
                     emailLogin.requestFocus();
                     return;
-                }
-                 else if (TextUtils.isEmpty(password)) {
+                } else if (TextUtils.isEmpty(password)) {
                     passwordLogin.setError("Please Enter password");
                     v.vibrate(100);
                     passwordLogin.requestFocus();
                     return;
-                }
-                 else if (email.isEmpty() && password.isEmpty()) {
+                } else if (email.isEmpty() && password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Fields are empty", Toast.LENGTH_LONG).show();
 
                 } else if (password.length() < 6) {
@@ -165,6 +171,18 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
 
                                     } else {
+                                        Toast.makeText(LoginActivity.this, "Logging in....", Toast.LENGTH_SHORT).show();
+
+                                        Map<Object,String> userdata = new HashMap<>();
+                                        userdata.put("Email",email);
+                                        userdata.put("password",password);
+
+                                        database.getReference("JobSeeker")
+                                                .child("LoginInfo").child(auth.getCurrentUser().getUid()).setValue(userdata);
+
+                                        emailLogin.setText("");
+                                        passwordLogin.setText("");
+
                                         Intent intent = new Intent(LoginActivity.this, DashboardJobSeeker.class);
                                         startActivity(intent);
                                         finish();
@@ -183,18 +201,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser=auth.getCurrentUser();
-        //user is not logged in
-        if (currentUser==null){
-            Toast.makeText(this, "Please create an account first!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
-            finish();
 
-        }
-    }
+
+
     //    private void moveToDashboardActivity(FirebaseUser mFirebaseUser) {
 //
 //        database.getReference().child(mFirebaseUser.getUid())

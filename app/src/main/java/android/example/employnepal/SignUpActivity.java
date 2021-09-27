@@ -27,6 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SignUpActivity extends AppCompatActivity {
     UserHelper userHelper;
     FirebaseDatabase database;
@@ -194,19 +197,19 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
                 //verify phone
-                Intent intent=new Intent(SignUpActivity.this,OtpActivity.class);
-                intent.putExtra("firstName",firstName);
-                intent.putExtra("lastName",lastName);
-                intent.putExtra("email",emailSignUp);
-                intent.putExtra("contact",contactSignUp);
-                intent.putExtra("address",locationSignUp);
-                intent.putExtra("gender",gender);
-                intent.putExtra("password",passwordSignUp);
-                intent.putExtra("confirmPassword",confirmPasswordSignUp);
-                intent.putExtra("whatTODo","storeData");
-
-
-                startActivity(intent);
+//                Intent intent=new Intent(SignUpActivity.this,OtpActivity.class);
+//                intent.putExtra("firstName",firstName);
+//                intent.putExtra("lastName",lastName);
+//                intent.putExtra("email",emailSignUp);
+//                intent.putExtra("contact",contactSignUp);
+//                intent.putExtra("address",locationSignUp);
+//                intent.putExtra("gender",gender);
+//                intent.putExtra("password",passwordSignUp);
+//                intent.putExtra("confirmPassword",confirmPasswordSignUp);
+//                intent.putExtra("whatTODo","storeData");
+//
+//
+//                startActivity(intent);
 
                 //setting value to database
                 /*UserHelper userHelper = new UserHelper(firstName, lastName, emailSignUp, contactSignUp, locationSignUp, gender, passwordSignUp, confirmPasswordSignUp);
@@ -217,17 +220,32 @@ public class SignUpActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
                 //authentication with email and password
-                /*auth.createUserWithEmailAndPassword(emailSignUp, passwordSignUp).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                auth.createUserWithEmailAndPassword(emailSignUp, passwordSignUp).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(SignUpActivity.this, "User Authentication successful", Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.GONE);
+
 
                         if (!task.isSuccessful()) {
                             Toast.makeText(SignUpActivity.this, "Authentication failed :" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         } else {
                             //Intent intent=new Intent(SignUpActivity.this,LoginActivity.class);
-                            Intent intent=new Intent(SignUpActivity.this,OtpActivity.class);
+                            Toast.makeText(SignUpActivity.this, "User Authentication successful", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+
+                            Map<Object,String> userdata = new HashMap<>();
+                            userdata.put("firstName",firstName);
+                            userdata.put("lastName",lastName);
+                            userdata.put("email",emailSignUp);
+                            userdata.put("contact",contactSignUp);
+                            userdata.put("location",locationSignUp);
+                            userdata.put("gender",gender);
+                            userdata.put("password",passwordSignUp);
+                            userdata.put("confirmPassword",confirmPasswordSignUp);
+
+                            database.getReference("users")
+                                    .child(auth.getCurrentUser().getUid()).setValue(userdata);
+
+                            Intent intent=new Intent(SignUpActivity.this,LoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();
@@ -235,7 +253,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                         }
                     }
-                });*/
+                });
 
 
             }
