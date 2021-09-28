@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ApplyJobActivity"
             android:exported="true" />
         <activity
             android:name=".PostActivity"
@@ -48,7 +48,7 @@
         <activity android:name=".DashboardJobProvider" />
         <activity android:name=".DashboardJobSeeker" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".ApplyJobActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
